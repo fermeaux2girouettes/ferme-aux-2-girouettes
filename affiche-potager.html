@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Affiche – Ferme aux 2 Girouettes</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #e8e2d8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+
+    .affiche {
+      width: 210mm;
+      min-height: 297mm;
+      background: #f7f3ec;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+    }
+
+    /* Bande décorative en haut */
+    .bande-top {
+      height: 12px;
+      background: repeating-linear-gradient(
+        90deg,
+        #3a5c2e 0px, #3a5c2e 24px,
+        #c47c3a 24px, #c47c3a 48px
+      );
+    }
+
+    /* En-tête */
+    .entete {
+      background: #3a5c2e;
+      color: #f7f3ec;
+      padding: 2.2rem 2rem 1.8rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .entete::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: -18px; left: 0; right: 0;
+      height: 36px;
+      background: #f7f3ec;
+      clip-path: ellipse(55% 100% at 50% 0%);
+    }
+
+    .titre-ferme {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      line-height: 1.15;
+      letter-spacing: .01em;
+    }
+
+    .sous-titre {
+      font-size: .95rem;
+      opacity: .8;
+      margin-top: .4rem;
+      letter-spacing: .04em;
+    }
+
+    .label-bio {
+      display: inline-block;
+      margin-top: .9rem;
+      border: 1.5px solid #f7f3ec;
+      border-radius: 2px;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .25rem .8rem;
+      opacity: .9;
+    }
+
+    /* Corps */
+    .corps {
+      padding: 3rem 2rem 1.5rem;
+    }
+
+    .accroche {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: #3a5c2e;
+      text-align: center;
+      margin-bottom: 1.8rem;
+      line-height: 1.4;
+    }
+
+    /* Légumes grid */
+    .legumes-titre {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #c47c3a;
+      margin-bottom: .8rem;
+      text-align: center;
+    }
+
+    .legumes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .6rem;
+      margin-bottom: 2rem;
+    }
+
+    .legume-item {
+      background: #fff;
+      border-radius: 6px;
+      padding: .7rem .4rem;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+      border-bottom: 2px solid #eee;
+    }
+    .legume-item.terre   { border-bottom-color: #c47c3a; }
+    .legume-item.vert    { border-bottom-color: #3a5c2e; }
+
+    .legume-emoji { font-size: 1.7rem; display: block; }
+    .legume-nom   { font-size: .7rem; font-weight: 600; margin-top: .3rem; color: #4a3728; }
+    .legume-prix  { font-size: .65rem; color: #6a8f5a; margin-top: .1rem; }
+
+    /* Séparateur */
+    .separateur {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin: 1.5rem 0;
+      color: #c47c3a;
+    }
+    .separateur hr { flex: 1; border: none; border-top: 1px solid #d4cdc3; }
+    .separateur span { font-size: 1.1rem; }
+
+    /* Bloc QR + CTA */
+    .bloc-commande {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      background: #3a5c2e;
+      border-radius: 8px;
+      padding: 1.4rem 1.6rem;
+      color: #f7f3ec;
+      margin-bottom: 1.5rem;
+    }
+
+    .qr-placeholder {
+      flex-shrink: 0;
+      width: 90px; height: 90px;
+      background: #fff;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .3rem;
+    }
+
+    .qr-placeholder .qr-icon { font-size: 2.2rem; }
+    .qr-placeholder .qr-label {
+      font-size: .55rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: #3a5c2e;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .cta-texte h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: .4rem;
+    }
+
+    .cta-texte p {
+      font-size: .82rem;
+      opacity: .85;
+      line-height: 1.5;
+    }
+
+    .etapes {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      margin-top: .6rem;
+    }
+
+    .etape {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .8rem;
+    }
+
+    .etape-num {
+      background: #c47c3a;
+      color: #fff;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Infos pratiques */
+    .infos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .7rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-card {
+      background: #fff;
+      border-radius: 6px;
+      padding: .7rem .9rem;
+      font-size: .8rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+
+    .info-card .info-icon { font-size: 1.1rem; margin-bottom: .25rem; }
+    .info-card strong { display: block; color: #3a5c2e; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .15rem; }
+
+    /* Pied */
+    .pied {
+      text-align: center;
+      font-size: .72rem;
+      color: #aaa;
+      padding: .5rem 2rem 1rem;
+      border-top: 1px solid #e0d9ce;
+    }
+
+    .bande-bottom {
+      height: 8px;
+      background: repeating-linear-gradient(
+        90deg,
+        #c47c3a 0px, #c47c3a 16px,
+        #3a5c2e 16px, #3a5c2e 32px
+      );
+    }
+
+    @media print {
+      body { background: none; padding: 0; }
+      .affiche { box-shadow: none; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="affiche">
+  <div class="bande-top"></div>
+
+  <div class="entete">
+    <div class="titre-ferme">🌿 Ferme aux 2 Girouettes</div>
+    <div class="sous-titre">Maraîchage biologique · Merville (59)</div>
+    <div class="label-bio">🌱 Agriculture biologique</div>
+  </div>
+
+  <div class="corps">
+
+    <p class="accroche">Des légumes biologiques cultivés à Merville,<br>cueillis la veille au soir, livrés au CAMSP.</p>
+
+    <div class="legumes-titre">Légumes disponibles cette saison</div>
+
+    <div class="legumes-grid">
+      <div class="legume-item vert">
+        <span class="legume-emoji">🥬</span>
+        <div class="legume-nom">Blettes</div>
+        <div class="legume-prix">3,00 € / kg</div>
+      </div>
+      <div class="legume-item terre">
+        <span class="legume-emoji">🥒</span>
+        <div class="legume-nom">Concombres</div>
+        <div class="legume-prix">1,50 € / pièce</div>
+      </div>
+      <div class="legume-item vert">
+        <span class="legume-emoji">🫛</span>
+        <div class="legume-nom">Courgettes</div>
+        <div class="legume-prix">2,60 € / kg</div>
+      </div>
+      <div class="legume-item terre">
+        <span class="legume-emoji">🌿</span>
+        <div class="legume-nom">Basilic</div>
+        <div class="legume-prix">1,50 € / botte</div>
+      </div>
+      <div class="legume-item vert">
+        <span class="legume-emoji">🍅</span>
+        <div class="legume-nom">Tomates</div>
+        <div class="legume-prix">bientôt</div>
+      </div>
+      <div class="legume-item terre">
+        <span class="legume-emoji">🫑</span>
+        <div class="legume-nom">Poivrons</div>
+        <div class="legume-prix">bientôt</div>
+      </div>
+      <div class="legume-item vert">
+        <span class="legume-emoji">🍉</span>
+        <div class="legume-nom">Pastèques</div>
+        <div class="legume-prix">bientôt</div>
+      </div>
+      <div class="legume-item terre">
+        <span class="legume-emoji">🎃</span>
+        <div class="legume-nom">Courges</div>
+        <div class="legume-prix">automne</div>
+      </div>
+    </div>
+
+    <div class="separateur">
+      <hr><span>🌾</span><hr>
+    </div>
+
+    <div class="bloc-commande">
+      <div class="qr-placeholder">
+        <span class="qr-icon">📱</span>
+        <div class="qr-label">QR Code<br>à coller ici</div>
+      </div>
+      <div class="cta-texte">
+        <h3>Commander en ligne, c'est simple</h3>
+        <div class="etapes">
+          <div class="etape">
+            <div class="etape-num">1</div>
+            <span>Scannez le QR code avec votre téléphone</span>
+          </div>
+          <div class="etape">
+            <div class="etape-num">2</div>
+            <span>Choisissez vos légumes et quantités</span>
+          </div>
+          <div class="etape">
+            <div class="etape-num">3</div>
+            <span>Envoyez — Jean-François vous confirme la livraison</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="infos">
+      <div class="info-card">
+        <div class="info-icon">💶</div>
+        <strong>Paiement</strong>
+        À la livraison<br>(espèces ou chèque)
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🚚</div>
+        <strong>Livraison</strong>
+        Lundi ou jeudi<br>au CAMSP
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🌿</div>
+        <strong>Fraîcheur garantie</strong>
+        Cueillis la veille au soir<br>Légumes biologiques
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📧</div>
+        <strong>Contact</strong>
+        fermeaux2girouettes<br>@gmail.com
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pied">
+    Ferme aux 2 Girouettes · Maraîchage bio · Merville (59660) · fermeaux2girouettes@gmail.com
+  </div>
+  <div class="bande-bottom"></div>
+</div>
+
+</body>
+</html>
